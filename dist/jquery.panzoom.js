@@ -1,7 +1,7 @@
 /**
- * @license jquery.panzoom.js v3.2.2
- * Updated: Wed Jun 21 2017
- * Add pan and zoom functionality to any element
+ * @license jquery.panzoom.js v3.2.2+
+ * Updated: Wed Dec 11 2017
+ * Add option to disable single touch (by fr33z00)
  * Copyright (c) timmy willison
  * Released under the MIT license
  * https://github.com/timmywil/jquery.panzoom/blob/master/MIT-License.txt
@@ -292,6 +292,9 @@
 		// Pan only on the X or Y axes
 		disableXAxis: false,
 		disableYAxis: false,
+
+		// Restrict panning to 2 fingers on touch screens
+		disable1Touch: true, 
 
 		// Set whether you'd like to pan on left (1), middle (2), or right click (3)
 		which: 1,
@@ -973,7 +976,7 @@
 					if (e.type === 'touchstart' ?
 						// Touch
 						(touches = e.touches || e.originalEvent.touches) &&
-							((touches.length === 1 && !options.disablePan) || touches.length === 2) :
+							((touches.length === 1 && !options.disablePan && !options.disable1Touch) || touches.length === 2) :
 						// Mouse/Pointer: Ignore unexpected click types
 						// Support: IE10 only
 						// IE10 does not support e.button for MSPointerDown, but does have e.which
@@ -1220,19 +1223,25 @@
 						var middle = self._getMiddle(touches);
 						var diff = self._getDistance(touches) - startDistance;
 
+            var preferPan = Math.abs(diff) < Math.abs(middle.clientX - startMiddle.clientX) &&
+              Math.abs(diff) < Math.abs(middle.clientY - startMiddle.clientY);
+
 						// Set zoom
-						self.zoom(diff * (options.increment / 100) + startScale, {
-							focal: middle,
-							matrix: matrix,
-							animate: 'skip'
-						});
+            if (!options.disable1Touch || !preferPan)
+						  self.zoom(diff * (options.increment / 100) + startScale, {
+							  focal: middle,
+							  matrix: matrix,
+							  animate: 'skip'
+						  });
 
 						// Set pan
-						self.pan(
-							+matrix[4] + middle.clientX - startMiddle.clientX,
-							+matrix[5] + middle.clientY - startMiddle.clientY,
-							panOptions
-						);
+            if (!options.disable1Touch || preferPan)
+						  self.pan(
+							  +matrix[4] + middle.clientX - startMiddle.clientX,
+							  +matrix[5] + middle.clientY - startMiddle.clientY,
+							  panOptions
+						  );
+
 						startMiddle = middle;
 						return;
 					}
