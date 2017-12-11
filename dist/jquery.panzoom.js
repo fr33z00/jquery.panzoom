@@ -1223,7 +1223,7 @@
 						var middle = self._getMiddle(touches);
 						var diff = self._getDistance(touches) - startDistance;
 
-            var preferPan = Math.abs(diff) < Math.abs(middle.clientX - startMiddle.clientX) &&
+            var preferPan = Math.abs(diff) < Math.abs(middle.clientX - startMiddle.clientX) ||
               Math.abs(diff) < Math.abs(middle.clientY - startMiddle.clientY);
 
 						// Set zoom
