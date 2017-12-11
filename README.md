@@ -9,7 +9,7 @@ jquery.panzoom.min.js (12.5kb/4.6kb gzip), included in this repo, is compressed 
 
 For common support questions, see [the FAQ](https://github.com/timmywil/jquery.panzoom#faq) at the bottom.
 
-## fork notes:
+## Fork notes
 This forks adds the possibility to restrict panning to 2 fingers usage on touch screens (useful when click ability shall be preserved, and preferable to preserve sliding as a navigation act). 
 
 ## Dependencies
