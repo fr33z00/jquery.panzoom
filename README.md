@@ -99,6 +99,9 @@ Panzoom.defaults = {
   disableXAxis: false,
   disableYAxis: false,
 
+  // Restrict panning to 2 fingers on touch screens
+  disable1Touch: true, 
+
   // Set whether you'd like to pan on left (1), middle (2), or right click (3)
   which: 1,
 
