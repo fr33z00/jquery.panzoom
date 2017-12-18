@@ -717,7 +717,7 @@
 				}
 				animate = true;
 			} else {
-				scale = 1 / startScale;
+				scale /= startScale;
 			}
 
 			// Constrain scale
@@ -1223,11 +1223,13 @@
 						var middle = self._getMiddle(touches);
 						var diff = self._getDistance(touches) - startDistance;
 
-            var preferPan = Math.abs(diff) < Math.abs(middle.clientX - startMiddle.clientX) ||
-              Math.abs(diff) < Math.abs(middle.clientY - startMiddle.clientY);
+						var deltaX = middle.clientX - startMiddle.clientX;
+						var deltaY = middle.clientY - startMiddle.clientY;
+						var enablePan = (Math.abs(deltaX) + Math.abs(deltaY)) > 5 && (Math.abs(diff) < (Math.abs(deltaX) + Math.abs(deltaY)));
+						var enableZoom = Math.abs(diff) > 5 && (Math.abs(diff) > (Math.abs(deltaX) + Math.abs(deltaY)));
 
 						// Set zoom
-            if (!options.disable1Touch || !preferPan)
+						if (!options.disable1Touch || enableZoom)
 						  self.zoom(diff * (options.increment / 100) + startScale, {
 							  focal: middle,
 							  matrix: matrix,
@@ -1235,14 +1237,14 @@
 						  });
 
 						// Set pan
-            if (!options.disable1Touch || preferPan)
-						  self.pan(
-							  +matrix[4] + middle.clientX - startMiddle.clientX,
-							  +matrix[5] + middle.clientY - startMiddle.clientY,
-							  panOptions
-						  );
-
-						startMiddle = middle;
+						if (!options.disable1Touch || enablePan){
+							self.pan(
+								+matrix[4] + deltaX,
+								+matrix[5] + deltaY,
+								panOptions
+							);
+							startMiddle = middle;
+						}
 						return;
 					}
 					coords = touches[0] || { pageX: 0, pageY: 0 };

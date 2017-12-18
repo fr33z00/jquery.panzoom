@@ -1,5 +1,5 @@
 /**
- * @license jquery.panzoom.js v3.2.2+
+ * @license jquery.panzoom.js v3.2.2+1Touch
  * Updated: Wed Dec 11 2017
  * Add option to disable single touch (by fr33z00)
  * Copyright (c) timmy willison
